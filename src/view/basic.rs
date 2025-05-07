@@ -87,9 +87,12 @@ impl TimeManager {
     /// Explicitly advances the context to infinite time.
     /// This is useful if we don't want to wait for `Drop` to trigger.
     pub fn cleanup(&mut self) {
-        self.underlying.time.set_infinite();
-        let _ = log_event(&TimeEvent::Finish(self.underlying.time.load()));
-        self.scan_and_write_signals();
+        if Arc::strong_count(&self.underlying) == 1 {
+            // Only perform cleanup if this is the last strong reference
+            self.underlying.time.set_infinite();
+            let _ = log_event(&TimeEvent::Finish(self.underlying.time.load()));
+            self.scan_and_write_signals();
+        }
     }
 }
 
