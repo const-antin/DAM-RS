@@ -48,7 +48,9 @@ pub fn make_builder(mode: super::RunMode) -> Builder {
     }
     let num_workers = config().get_workers();
     let target = fastrand::usize(0..num_workers);
-    may::coroutine::Builder::new().id(target)
+    may::coroutine::Builder::new().
+        .stack_size(10 * 1024 * 1024) // 10MB stack 
+        .id(target)
 }
 
 /// Spawns a coroutine, without the builder because
