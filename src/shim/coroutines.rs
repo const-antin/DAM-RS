@@ -49,7 +49,7 @@ pub fn make_builder(mode: super::RunMode) -> Builder {
     let num_workers = config().get_workers();
     let target = fastrand::usize(0..num_workers);
     may::coroutine::Builder::new()
-        .stack_size(10 * 1024 * 1024) // 10MB stack 
+        .stack_size(3 * 1024 * 1024) // 3MB stack 
         .id(target)
 }
 
